@@ -8,11 +8,24 @@ require_once  './Autoloader.php';
 
 Autoloader::register();
 
-$posteModel = new PosteModel();
-$posteModel->setTitre('Développeur React')
-    ->setDescription('Recherche dev React')
-    ->setActif(true);
-    
-$posteModel->create($posteModel);
+// $posteModel = new PosteModel();
+// $posteModel->setTitre('Développeur React')
+//     ->setDescription('Recherche dev React')
+//     ->setActif(true);
 
-var_dump($posteModel);
+// $posteModel->create($posteModel);
+
+/*****************************
+*    !!! SUITE ICI !!!
+****************************/
+$donnees = [
+    'titre' => 'Titre du poste',
+    'description' => 'Poste super !!',
+    'actif' => 1
+];
+
+$model =new PosteModel();
+$poste = $model->hydrate($donnees);
+
+$model->create($poste);
+var_dump($poste);

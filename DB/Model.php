@@ -4,102 +4,132 @@ namespace App\Db;
 
 use PDOStatement;
 
-
-class Model extends Db //Model est enfant de Db qui lui même est enfant de PDO
+class Model extends Db
 {
-    protected ?string $table = null; // 3 possibilité public, private (private juste pour cette table), protected (class private aussi pour les enfants)
+    protected ?string $table = null;
     private ?Db $db = null;
 
     /**
-     * findAll : Fonction qui récupére toutes les entrées d'une table
+     * Fonction qui récupère toutes les entrées d'une table
      *
      * @return array
      */
-    public function findAll(): array //findAll trouve toutes les entrées dans une table
+    public function findAll(): array
     {
         $query = $this->runQuery("SELECT * FROM $this->table");
+
         return $query->fetchAll();
     }
 
     public function find(int $id): array|bool
     {
-        return $this->runQuery("SELECT * FROM $this->table WHERE id = ?", [$id])->fetch(); // ? =marqueur SQL
+        return $this->runQuery("SELECT * FROM $this->table WHERE id = ?", [$id])->fetch();
     }
 
-    
-
     /**
-     *function de recherche par critères dynamique findBy
+     * Fonction de recherche par critères dynamique
      *
      * @param array $criteres
      * @return array
      */
-    public function findBy(array $criteres): array 
+    public function findBy(array $criteres): array
     {
-        //SELECT * FROM poste WHERE titre = ? AND id = ?
+        // SELECT * FROM poste WHERE titre = ? AND id = ?
         $champs = [];
         $valeurs = [];
 
-        foreach ($criteres as $key => $value) { // Foreach ($données as $data) $key a chaque tour de boucle je récupère que la clé , et la valeur séparément 
+        foreach ($criteres as $key => $value) {
             $champs[] = "$key = ?";
             $valeurs[] = $value;
         }
-        
+
         $listeChamp = implode(' AND ', $champs);
 
-        //On execute la requéte
+        // On execute la requete
         return $this->runQuery("SELECT * FROM $this->table WHERE $listeChamp", $valeurs)->fetchAll();
-    }    
-    
+    }
+
     /**
-     * Création d'une entrée de base de données
+     * Création d'une entrée en base de données
      *
      * @param self $model
      * @return void
      */
     public function create(self $model)
     {
-       //Insert INTO poste (titre, description, actif) VALUES (?, ?, ?) (? marqueurs)
-       $champs = [];
-       $marqueurSql = [];
-       $valeurs = [];
+        // INSERT INTO poste (titre, description, actif) VALUES (?, ?, ?)
+        $champs = [];
+        $marqueurSql = [];
+        $valeurs = [];
 
         foreach ($model as $key => $value) {
             if ($key != 'table' && $key != 'db' && $value !== null) {
-            $champs[] = $key;
-            $marqueurSql[] = "?";
-            $valeurs[] = $value;
+                $champs[] = $key;
+                $marqueurSql[] = "?";
+                $valeurs[] = $value;
             }
         }
-        $listeChamp = implode(', ', $champs);
-        $listeMarqueurSql = implode(', ', $marqueurSql);
 
-        // On execute la requete SQL
-        return $this->runQuery(" INSERT INTO $this->table ($listeChamp) VALUES ($listeMarqueurSql)", $valeurs);
+        $listeChamp = implode(', ', $champs);
+        $listeMarqeurSql =  implode(', ', $marqueurSql);
+
+        // On execute la requête SQL
+        return $this->runQuery("INSERT INTO $this->table ($listeChamp) VALUES ($listeMarqeurSql)", $valeurs);
     }
 
     /**
-     * Fonction qui envoie une requéte en base de données
+     * Fonction qui envoie une requête en base de données
      *
      * @param string $query
      * @param array $attributs
-     * @return PDOStatement|bool
+     * @return PDOStatement|boolean
      */
     public function runQuery(string $query, array $attributs = []): PDOStatement|bool
     {
-        // On récupére l'instance (connexion) de Db
-        $this->db = Db::getInstance(); //db = Data Base
+        // On récupère l'instance de Db
+        $this->db = Db::getInstance();
 
         // On vérifie si on a des attributs
         if ($attributs != null) {
-            // Requéte préparée
+            // Requête préparée
             $query = $this->db->prepare($query);
             $query->execute($attributs);
 
             return $query;
-        } else{
-            // requéte simple
+        } else {
+            // Requete simple
             return $this->db->query($query);
         }
+    }
+
+    public function hydrate(array $donnees){
+        foreach($donnees as $key => $value){
+            // On récupère le nom du setter qui correspond à la clé (key)
+            $setter = 'set' . ucwords($key);
+
+            // On vérifie l'existance du setter créé
+            if(method_exists($this, $setter)){
+                // Si OK, on appelle (exécute) le setter
+                $this->$setter($value);
+            }
+        }
+        return $this;
+    }
+
+    public function update(int $id, Model $model ){
+        $champs =[];
+        $valeurs =[];
+        foreach($model as $champ => $valeur){
+            if($valeur !== null && $champ != 'db' && $champ != 'table'){    // !== different en valeur et aussi en type
+                $champs[] = "$champ = ?";
+                $valeurs[] = $valeur;
+            }
+        }
+        $valeurs[] = $id;
+        // On trabsforme le tableau $champs en string
+        $listeChamps = implode(',', $champs);
+
+        //on execute notre requete
+        return $this->runQuery("UPDATE $this->table SET $listeChamps WHERE id = ?", $valeurs);
     }
 }
