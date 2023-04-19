@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Db;
+namespace App\Core;
 
 use PDOStatement;
 
@@ -101,7 +101,12 @@ class Model extends Db
             return $this->db->query($query);
         }
     }
-
+    /**
+     * Fonction qui hydrate un poste à partir d'un tableau associatif
+     *
+     * @param array $donnees
+     *
+     */
     public function hydrate(array $donnees){
         foreach($donnees as $key => $value){
             // On récupère le nom du setter qui correspond à la clé (key)
@@ -116,6 +121,12 @@ class Model extends Db
         return $this;
     }
 
+    /**
+     * Fonction qui met a jour les valeurs des attributs d'un poste selon son id
+     *
+     * @param integer $id
+     * @param Model $model
+     */
     public function update(int $id, Model $model ){
         $champs =[];
         $valeurs =[];
@@ -130,6 +141,10 @@ class Model extends Db
         $listeChamps = implode(',', $champs);
 
         //on execute notre requete
-        return $this->runQuery("UPDATE $this->table SET $listeChamps WHERE id = ?", $valeurs);
+        return $this->runQuery("UPDATE $this->table SET $listeChamps WHERE id = ?;", $valeurs);
+    }
+
+    public function delete(int $id){
+        return $this->runQuery("DELETE FROM $this->table WHERE id = ?", [$id]);
     }
 }
