@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Db;
+namespace App\Core;
 
 class PosteModel extends Model
 {
@@ -8,7 +8,7 @@ class PosteModel extends Model
     protected ?string $titre =null;
     protected ?string $description = null;
     protected ?\DateTime $createdAt = null;
-    protected ?bool $actif = null;
+    protected ?int $actif = null;
 
     public function __construct()
     {
