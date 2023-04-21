@@ -1,0 +1,8 @@
+# On demarre le moteur de réécriture d'url
+RewriteEngine On
+
+# On définit notre régle d'écriture 
+RewriteRule ^([a-zA-Z0-9\-\_\/]*)$ index.php?p=$1     
+# regex acceptant les minuscules, les maguscules, les chiffre, et le signes -_/
+# on envoit tous sur le fichier d'acceuil index.php On nomme le 1er regex $1 s'il y en a un 2ieme on le nomme $2
+
