@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core;
+namespace App\Models;
 
 class UserModel extends Model{
     protected ?int $id = null;

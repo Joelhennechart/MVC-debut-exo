@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Core;
+namespace App\Models;
 
+use App\Core\Db; 
 use PDOStatement;
 
 class Model extends Db
