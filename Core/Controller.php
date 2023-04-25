@@ -1,5 +1,5 @@
 <?php
-
+//chef d'orchestre de l'application MVC
 namespace App\Core;
 
 abstract class Controller
