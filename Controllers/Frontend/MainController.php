@@ -14,7 +14,7 @@ class MainController extends Controller
         $postes = new PosteModel();
 
         $this->render('Frontend/index', [
-            'postes' => $postes->findAll(),
+            'postes' => $postes->findAll(), //tableau valeur 'postes'
        ]);
     }
     
