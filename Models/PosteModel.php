@@ -1,5 +1,5 @@
 <?php
-
+//imite la BDD qui est sur mysql change les données du tableau associatif en objet pour pouvoir mieux les travailler
 namespace App\Models;
 
 class PosteModel extends Model

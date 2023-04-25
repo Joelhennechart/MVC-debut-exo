@@ -1,5 +1,5 @@
 <?php
-
+// controle toutes les pages
 namespace App\Controllers\Frontend;
 
 use App\Core\Route;
@@ -18,9 +18,5 @@ class MainController extends Controller
        ]);
     }
     
-    #[Route('test', '/test', ['GET'])]
-    public function test()
-    {
-        echo 'Test';
-    }
+    
 }
