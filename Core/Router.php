@@ -1,6 +1,5 @@
 <?php
 namespace App\Core;
-// definit si une url qu'on rentre est valable ou non, et envoi dans la bonne url
 class Router
 {
     private array $routes = [];

@@ -14,6 +14,10 @@ class UserModel extends Model{
         $this->table = 'user';
     }
     
+    public function findUserByEmail(string $email): mixed
+    {
+        return $this->runQuery("SELECT * FROM $this->table WHERE email = ?", [$email])->fetch();
+    }
 
     /**
      * Get the value of id

@@ -17,8 +17,6 @@ abstract class Controller
         
         $contenu = ob_get_clean();
 
-        var_dump($contenu);
-
         include_once ROOT . '/Views/base.php';
         
     }
