@@ -9,6 +9,11 @@
                     </li>
                 </ul>
             </div>
+             <ul class="navbar-nav ms-auto" ><!--ms-auto décale tout a droite en bootstrap -->
+                <li class="nav-item">
+                    <a href="/login" class="btn btn-outline">Se connecter</a>
+                </li>
+            </ul>
         </div>
     </nav>
 </header>
