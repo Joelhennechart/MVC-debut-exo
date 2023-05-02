@@ -53,17 +53,16 @@ class Model extends Db
     /**
      * Création d'une entrée en base de données
      *
-     * @param self $model
      * @return void
      */
-    public function create(self $model)
+    public function create()
     {
         // INSERT INTO poste (titre, description, actif) VALUES (?, ?, ?)
         $champs = [];
         $marqueurSql = [];
         $valeurs = [];
 
-        foreach ($model as $key => $value) {
+        foreach ($this as $key => $value) {
             if ($key != 'table' && $key != 'db' && $value !== null) {
                 $champs[] = $key;
                 $marqueurSql[] = "?";
@@ -105,10 +104,10 @@ class Model extends Db
     /**
      * Fonction qui hydrate un poste à partir d'un tableau associatif
      *
-     * @param array $donnees
+     * @param mixed $donnees  mixed dis qu'on peut attendre plusieurs choses (tableau ou objet)
      *
      */
-    public function hydrate(array $donnees){
+    public function hydrate(mixed $donnees){
         foreach($donnees as $key => $value){
             // On récupère le nom du setter qui correspond à la clé (key)
             $setter = 'set' . ucwords($key);
@@ -128,16 +127,17 @@ class Model extends Db
      * @param integer $id
      * @param Model $model
      */
-    public function update(int $id, Model $model ){
+    public function update(int $id){
+
         $champs =[];
         $valeurs =[];
-        foreach($model as $champ => $valeur){
+        foreach($this as $champ => $valeur){
             if($valeur !== null && $champ != 'db' && $champ != 'table'){    // !== different en valeur et aussi en type
                 $champs[] = "$champ = ?";
                 $valeurs[] = $valeur;
             }
         }
-        $valeurs[] = $id;
+        $valeurs[] = $this->$id;
         // On trabsforme le tableau $champs en string
         $listeChamps = implode(',', $champs);
 
