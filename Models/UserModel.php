@@ -13,6 +13,16 @@ class UserModel extends Model{
     {
         $this->table = 'user';
     }
+
+    public function setSession(): void
+    {
+        $_SESSION['user'] = [
+            'id' => $this->id,
+            'nom' =>$this->nom,
+            'prenom'=>$this->prenom,
+            'email' =>$this->email,
+        ]
+    }
     
     public function findUserByEmail(string $email): mixed
     {

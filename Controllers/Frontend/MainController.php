@@ -6,6 +6,7 @@ use App\Core\Route;
 use App\Core\Controller;
 use App\Core\Form;
 use App\Models\PosteModel;
+use App\Models\UserModel;
 
 class MainController extends Controller
 {
@@ -60,8 +61,25 @@ class MainController extends Controller
     public function register(): void
     {
         if(Form::validate($_POST, ['nom', 'prenom', 'email', 'password'])){
+            $nom = htmlspecialchars($_POST['nom']);
+            $prenom = htmlspecialchars($_POST['prenom']);
+            $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+            $password = password_hash($_POST['password'], PASSWORD_ARGON2I); //hachage du password
             
+            $user = (new UserModel())   //on importe dans la bdd user
+                ->setNom($nom)
+                ->setPrenom($prenom)
+                ->setEmail($email)
+                ->setPassword($password);
+                
+            $user->create();
+
+            $_SESSION['message']['success'] = "Vous étes bien inscrit à notre application";
+
+            header('Location: /login');
+            exit();
         }
+    
 
     $form = (new Form())
         ->startForm('#', 'POST', [
