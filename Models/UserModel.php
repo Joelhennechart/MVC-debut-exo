@@ -13,15 +13,19 @@ class UserModel extends Model{
     {
         $this->table = 'user';
     }
-
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
     public function setSession(): void
     {
-        $_SESSION['user'] = [
-            'id' => $this->id,
+        $_SESSION ['user'] = [
+            'id' =>$this->id,
             'nom' =>$this->nom,
-            'prenom'=>$this->prenom,
+            'prenom' =>$this->prenom,
             'email' =>$this->email,
-        ]
+        ];
     }
     
     public function findUserByEmail(string $email): mixed

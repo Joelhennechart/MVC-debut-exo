@@ -10,9 +10,20 @@
                 </ul>
             </div>
              <ul class="navbar-nav ms-auto" ><!--ms-auto décale tout a droite en bootstrap -->
-                <li class="nav-item">
-                    <a href="/login" class="btn btn-outline">Se connecter</a>
+                <?php if (isset($_SESSION['user'])) : ?>
+                    <li class="nav-item">
+                    <a href="/logout" class="btn btn-danger">Se deconnecter</a>
+                    </li>
+                <?php else :?> {
+                    <li class="nav-item">
+                    <a href="/login"
+                    class="btn btn-outline">Se connecter</a>
                 </li>
+                }
+                
+                <?php endif; ?>
+
+                
             </ul>
         </div>
     </nav>
