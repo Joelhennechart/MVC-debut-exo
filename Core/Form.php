@@ -18,7 +18,7 @@ class Form
          * @param array $champs les champs obligatoires pour valider le formulaire
          * @return boolean
          */
-    public function validate(array $form, array $champs): bool
+    public static function validate(array $form, array $champs): bool
         {
             // On parcour les champs obligeatoire
             foreach ($champs as $champ) {
