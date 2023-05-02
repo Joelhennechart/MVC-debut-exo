@@ -11,6 +11,7 @@
     <?php include_once 'layout/header.php'; ?>
 
 <main>
+    <?php include_once 'Layout/messages.php'; ?>
      <?= $contenu;   //<?= est egal (<php? echo) ?>
 </main>
 <footer></footer>

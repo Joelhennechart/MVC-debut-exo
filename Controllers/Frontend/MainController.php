@@ -23,6 +23,32 @@ class MainController extends Controller
     #[Route('login', '/login', ['GET', 'POST'])]
     public function login(): void
     {
+        if(Form::validate($_POST, ['email', 'password'])){
+            $user = new UserModel();
+
+            $user = $user->findUserByEmail($_POST['email']);
+
+            if (!$user) {
+                $_SESSION['message']['error'] = 'Identifiant invalides';
+
+                header("Location: /login");
+                exit();
+            }
+            
+            $user = (new UserModel)->hydrate($user);
+                
+            if (password_verify($_POST['password'], $user->getPassword())){
+                $user->setSession();
+                header('Location: /');
+                exit();
+            } else {
+                $_SESSION['message']['error'] = 'Identifiants invalides';
+                header("Location: /login");
+                exit();
+            }
+
+        }
+
         $form = (new Form())
             ->startForm("#", "POST", [
                 'class' => 'form card p-3 w-50 mx-auto',
@@ -139,5 +165,13 @@ class MainController extends Controller
             'form' => $form->createForm(),
         ]);
       
+    }
+    #[Route('logout', '/logout', ['GET'])]
+    public function logout(): void
+    {
+        unset($_SESSION['user']);
+
+        header("Location: $_SERVER[HTTP_REFERER]");//Reviens sur l'ancienne page quand je me deconnecte
+        exit();
     }
 }

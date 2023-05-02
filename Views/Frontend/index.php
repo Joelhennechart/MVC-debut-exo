@@ -1,6 +1,4 @@
-<h1>Hello World</h1>
-
-
+    <!-- <?php var_dump($_SESSION); ?> -->
     <section class="container mt-4 postes">
         <h1 class="text-center">Page d'acceuil</h1>
         <div class="row justify-content-between">
